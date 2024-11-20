@@ -1,3 +1,4 @@
 [submodule "noetic-slam"]
 	path = noetic-slam
 	url = https://github.com/M2-TE/noetic-slam.git
+	branch = feature/annikaul-researchproject
