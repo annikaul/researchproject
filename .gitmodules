@@ -2,3 +2,8 @@
 	path = noetic-slam
 	url = https://github.com/M2-TE/noetic-slam.git
 	branch = feature/annikaul-researchproject
+
+[submodule "hyperspace"]
+	path = hyperspace
+	url = https://gitlab.informatik.uni-osnabrueck.de/hyperspace/hyperspace.git
+	branch = feature/akaul-researchproject
