@@ -28,10 +28,11 @@ class ImageSaverNode(Node):
         self.bridge = CvBridge()
 
     def createDirStructure(self):
-        # create new directory for dara to be saved in
-        baseTargetDir = os.path.dirname(os.path.realpath(__file__ + "/../../../../../../../")) + '/sampledata/raw/'
+        # create new directory for data to be saved in
+        baseTargetDir = os.path.dirname(os.path.realpath(__file__ + "/../../../../../../../")) + '/noetic-slam/sampledata/raw/'
+        if not os.path.exists(baseTargetDir):
+            os.makedirs(baseTargetDir)
 
-        print("----->" + baseTargetDir)
         # new directory name for files (= last directory name + 1)
         self.newDir = 0
         for dir in os.listdir(baseTargetDir):
@@ -56,7 +57,9 @@ class ImageSaverNode(Node):
             os.makedirs(self.scanTargetDir)
 
         # copy meta.yaml to raw dir
-        samplestructureDir = os.path.dirname(os.path.realpath(__file__ + "/../../../../../../../")) + '/sampledata/samplestructure/'
+        samplestructureDir = os.path.dirname(os.path.realpath(__file__ + "/../../../../../../../")) + '/noetic-slam/sampledata/samplestructure/'
+        if not os.path.exists(samplestructureDir):
+            os.makedirs(samplestructureDir)
         shutil.copy(samplestructureDir + 'raw/meta.yaml', baseTargetDir)
 
         # TODO: copy/create all meta.yaml
