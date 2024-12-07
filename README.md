@@ -19,3 +19,10 @@ bash scripts/combined-record.sh
 ```
 
 The newly created/saved files are save to a new folder in directory noetic-slam/sampledata/raw/.
+
+
+To clean up the saved data (delete data from scanner or camera if the other device did not collect data at the same time), run the following in directory ResearchProject:
+```console
+bash cleanupsampledata.sh <directory>
+```
+The used directory is the newly created directory where the data was stored in, e.g. 00000075 (in directory noetic-slam/sampledata/raw).
