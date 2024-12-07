@@ -19,6 +19,9 @@ class ImageSaverNode(Node):
         # init counter for name of images
         self.counter = 0
 
+        # set next timestamp where image should be saved
+        self.nextTimeStamp = (round(time.time() * 2) / 2) + 0.5
+
         # listen to input from /image_raw and process it in callback function listener_callback
         self.subscription = self.create_subscription(
             Image,
@@ -137,11 +140,11 @@ class ImageSaverNode(Node):
             yaml.dump(metaYamlNewDir, yaml_file, default_flow_style=True)
 
         # create image target directory
-        cam0Dir = self.newDir + 'cam_00000000/'
-        self.imgTargetDir =  cam0Dir + '00000000/'
+        self.cam0Dir = self.newDir + 'cam_00000000/'
+        # self.imgTargetDir =  self.cam0Dir + '00000000/'
 
-        if not os.path.exists(self.imgTargetDir):
-            os.makedirs(self.imgTargetDir)
+        if not os.path.exists(self.cam0Dir):
+            os.makedirs(self.cam0Dir)
 
         # Create meta.yaml in camera directory
         # TODO: An Kamera anpassen
@@ -159,7 +162,7 @@ class ImageSaverNode(Node):
                 "distortion_coefficients": []
             }
         }
-        with open(cam0Dir + 'meta.yaml', 'w') as yaml_file:
+        with open(self.cam0Dir + 'meta.yaml', 'w') as yaml_file:
             yaml.dump(metaYamlCam, yaml_file, default_flow_style=None)
 
         # Create <img>.yaml in camera directory
@@ -168,8 +171,36 @@ class ImageSaverNode(Node):
             "type": "camera_images",
             "transformation": [[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 1, 0], [0, 0, 0, 1]]
         }
-        with open(cam0Dir + '00000000.yaml', 'w') as yaml_file:
+        with open(self.cam0Dir + '00000000.yaml', 'w') as yaml_file:
             yaml.dump(metaYamlImgDir, yaml_file, default_flow_style=None)
+
+        
+
+        # create scan target directory
+        # TODO: Move this to lidardatasaver?
+        lidar0Dir = self.newDir + 'lidar_00000000/'
+        self.scanTargetDir = lidar0Dir + '00000000/'
+
+        if not os.path.exists(self.scanTargetDir):
+            os.makedirs(self.scanTargetDir)
+
+
+    def listener_callback(self, msg):
+        if (self.nextTimeStamp > time.time()):
+            return
+        
+        self.imgTargetDir = self.cam0Dir + str(int(self.nextTimeStamp * 10)) + '/'
+        os.makedirs(self.imgTargetDir)
+
+        self.nextTimeStamp += 0.5
+        
+        # write current camera image to specified folder & name
+        cv_image = self.bridge.imgmsg_to_cv2(msg, desired_encoding='bgr8')
+        image_nr = str(self.counter).zfill(8) # TODO: Image ggf nach Timecode benennen?
+        imageFile = self.imgTargetDir + 'image_' + image_nr + '.png'
+        imageMeta = self.imgTargetDir + 'meta_' + image_nr + '.yaml'
+
+        cv2.imwrite(imageFile, cv_image) 
 
         # Create meta png yaml
         metaYamlPng = {
@@ -184,24 +215,6 @@ class ImageSaverNode(Node):
         }
         with open(self.imgTargetDir + 'meta_png.yaml', 'w') as yaml_file:
             yaml.dump(metaYamlPng, yaml_file, default_flow_style=True)
-
-        # create scan target directory
-        # TODO: Move this to lidardatasaver?
-        lidar0Dir = self.newDir + 'lidar_00000000/'
-        self.scanTargetDir = lidar0Dir + '00000000/'
-
-        if not os.path.exists(self.scanTargetDir):
-            os.makedirs(self.scanTargetDir)
-
-
-    def listener_callback(self, msg):
-        # write current camera image to specified folder & name
-        cv_image = self.bridge.imgmsg_to_cv2(msg, desired_encoding='bgr8')
-        image_nr = str(self.counter).zfill(8) # TODO: Image ggf nach Timecode benennen?
-        imageFile = self.imgTargetDir + 'image_' + image_nr + '.png'
-        imageMeta = self.imgTargetDir + 'meta_' + image_nr + '.yaml'
-
-        cv2.imwrite(imageFile, cv_image) 
 
         # Create yaml for image
         # TODO: An Kamera anpassen
@@ -222,9 +235,6 @@ class ImageSaverNode(Node):
 
         # increase counter for next image name
         self.counter += 1
-
-        # delay 1 sec
-        time.sleep(1) # TODO: In Zeitraum 2: an Frequenz von Sensor anpassen
 
 def main(args=None):
     # start node
