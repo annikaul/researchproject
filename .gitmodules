@@ -7,3 +7,6 @@
 	path = hyperspace
 	url = https://gitlab.informatik.uni-osnabrueck.de/hyperspace/hyperspace.git
 	branch = feature/akaul-researchproject
+[submodule "chadbench"]
+	path = chadbench
+	url = https://github.com/annikaul/chadbench.git
