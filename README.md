@@ -1,28 +1,27 @@
-# ResearchProject
+## ResearchProject
 
+# Save Images and Scanner data
 To save files from the ouster scanner and a camera in a certain filestructure do the following:
 
-1. Open a Terminal and type in
+1. Setup: Open a Terminal and type in
 ```console
-sudo bash runpipe.bash
+cd chadbench
+. setup_env.sh
+bash setup.sh
+bash scripts/.entrypoint-local.sh
 ```
 
-2. Open a new Terminal and type in
-```console
-cd noetic-slam/
-bash scripts/docker-run.sh [none/integrated/nvidia/amd]
-```
-
-3. Run the following command either inside the docker container or in another terminal:
+2. Record images & lidar data
 ```console
 bash scripts/combined-record.sh
 ```
+The newly created/saved files are save to a new folder in directory chadbench/sampledata/raw/.
 
-The newly created/saved files are save to a new folder in directory noetic-slam/sampledata/raw/.
 
-
-To clean up the saved data (delete data from scanner or camera if the other device did not collect data at the same time), run the following in directory ResearchProject:
+# View colored pointcloud
+Samples were created from the previous steps, saved in hyperspace/hyperspace/akresearchproject/sampledata/raw. To view a sample pointcloud that is colored by a sample image, use the following command:
 ```console
-bash cleanupsampledata.sh <directory>
+cd chadbench
+python3 -m meta_setup install -e -c projection
+python3 hyperspace/akresearchproject/scripts/calibration.py
 ```
-The used directory is the newly created directory where the data was stored in, e.g. 00000075 (in directory noetic-slam/sampledata/raw).

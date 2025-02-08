@@ -3,6 +3,10 @@
 	url = https://github.com/M2-TE/noetic-slam.git
 	branch = feature/annikaul-researchproject
 
+[submodule "chadbench"]
+	path = chadbench
+	url = https://github.com/annikaul/chadbench.git
+	
 [submodule "hyperspace"]
 	path = hyperspace
 	url = https://gitlab.informatik.uni-osnabrueck.de/hyperspace/hyperspace.git
