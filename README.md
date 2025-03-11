@@ -1,6 +1,6 @@
-## ResearchProject
+### ResearchProject
 
-# Save Images and Scanner data
+## Save Images and Scanner data
 To save files from the ouster scanner and a camera in a certain filestructure do the following:
 
 1. Setup: Open a Terminal and type in
@@ -18,10 +18,24 @@ bash scripts/combined-record.sh
 The newly created/saved files are save to a new folder in directory chadbench/sampledata/raw/.
 
 
-# View colored pointcloud
-Samples were created from the previous steps, saved in hyperspace/hyperspace/akresearchproject/sampledata/raw. To view a sample pointcloud that is colored by a sample image, use the following command:
+## Stream colorized pointcloud
+# Initialize
+To stream a colorized pointcloud, first initialize the hyperspace project with:
+```console
+cd hyperspace
+python3 -m meta_setup install -e -c projection
+```
+
+# Calibrate camera
+For better results of a colorized pointcloud, first calibrate the camera with the commands:
 ```console
 cd chadbench
-python3 -m meta_setup install -e -c projection
-python3 hyperspace/akresearchproject/scripts/calibration.py
+bash scripts/calibrate-camera.sh
+```
+
+# View colored pointcloud
+Finally, to stream a colorized (live) pointcloud, run the following commands:
+```console
+cd chadbench
+bash scripts/stream-colored-pc.sh
 ```
