@@ -18,18 +18,24 @@ bash scripts/combined-record.sh
 The newly created/saved files are save to a new folder in directory chadbench/sampledata/raw/.
 
 
-## Stream colorized pointcloud
+## Show colorized pointcloud
 # Initialize
-To stream a colorized pointcloud, first initialize the hyperspace project with:
+To show a colorized pointcloud, first initialize the hyperspace project with:
 ```console
 cd hyperspace
 python3 -m meta_setup install -e -c projection
 ```
+There might be missing modules that have to be installed.
 
 # Calibrate camera
 For better results of a colorized pointcloud, first calibrate the camera with the commands:
 ```console
 cd chadbench
+. setup_env.sh
+bash scripts/dlio-launch.sh
+```
+In a second terminal type in
+```console
 bash scripts/calibrate-camera.sh
 ```
 
@@ -37,5 +43,17 @@ bash scripts/calibrate-camera.sh
 Finally, to stream a colorized (live) pointcloud, run the following commands:
 ```console
 cd chadbench
+. setup_env.sh
+bash scripts/dlio-launch.sh
+```
+In a second terminal type in
+```console
+. setup_env.sh
 bash scripts/stream-colored-pc.sh
 ```
+In a third terminal type in
+```console
+bash scripts/show-colored-pc.sh
+```
+
+Once the second script (stream-colored-pc.sh) is stopped, the third script (show-colored-pc.sh) finishes processing the colorized pointcloud and shows it after a few seconds.
