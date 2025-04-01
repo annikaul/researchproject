@@ -49,7 +49,7 @@ bash scripts/dlio-launch.sh
 In a second terminal type in
 ```console
 . setup_env.sh
-bash scripts/stream-colored-pc.sh
+bash scripts/combined-record.sh
 ```
 In a third terminal type in
 ```console
